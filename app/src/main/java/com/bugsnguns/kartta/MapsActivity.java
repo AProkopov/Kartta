@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,6 +40,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //start GeoDataService
         Intent serviceIntent = new Intent(this, GeoDataService.class);
         startService(serviceIntent);
+
+        createLocationRequest();
     }
 
     @Override
@@ -76,15 +79,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-
-
-
     }
 
     public void startGeoTracking(View view) {
         Log.v("START_BUTTON onClick", "startButton clicked");
         GeoDataService.trackRecorder();
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
 
