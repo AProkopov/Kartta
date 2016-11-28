@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -22,7 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import java.util.ArrayList;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -49,7 +47,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent serviceIntent = new Intent(this, GeoDataService.class);
         startService(serviceIntent);
 
-        // Create an instance of GoogleAPIClient.
+        // Create an instance of GoogleAPIClient. Создаем ApiClient
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -62,12 +60,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStart() {
+        //соединение с API при создании Activity
         mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     protected void onStop() {
+        //отключение от API при остановке Activity
         mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -80,29 +80,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnected(Bundle bundle) throws SecurityException{
+        //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
+        //запрашиваем последнюю известную локацию
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mLastLocation != null) {
-            mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-            mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-        }
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+    //требование реализации интерфейса GoogleApiClient.OnConnectionFailedListener
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+    //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         //adding LocationLayout
         try {
             mMap.setMyLocationEnabled(true);
@@ -110,7 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
         }
 
-        //also adding LocationLayout is possible with checking permissions
+        //можно проверить наличие необходимых permissions
         /**if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             //добавляет на карту точку с геопозицией и кнопку геопозиции
@@ -131,13 +127,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void startGeoTracking(View view) {
+        //проверка нажатия кнопки
         Log.v("START_BUTTON onClick", "startButton clicked");
+        //trackRecorder() работает в тестовом режиме, выводит текст в консоль
         GeoDataService.trackRecorder();
+        //ставим маркер на текущей локации
+        LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
     }
-
-
-
-
-
 
 }
