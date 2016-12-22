@@ -1,6 +1,7 @@
 package com.bugsnguns.kartta;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -38,6 +38,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -166,8 +167,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //trackRecorder() работает в тестовом режиме, выводит текст в консоль
         GeoDataService.trackRecorder();
         //ставим маркер на текущей локации
-        LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+        // LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        // mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
     }
 
 }
