@@ -34,6 +34,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean isRecording = false;
     public boolean isDrawing = false;
     public ArrayList<LatLng> geoLocationList = new ArrayList<>();
+    public ArrayList<LatLng> locationsForMap = new ArrayList<>();
+    public int geoLocationListSize = 0;
+    public int locationsForMapSize = 0;
 
 
 
@@ -139,16 +142,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //добавляем координаты в массив
         if (isRecording) {
             geoLocationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
+            geoLocationListSize++;
+
 
             //тестовый метод для проверки записи в ArrayList
-            for (int i = 0; i < geoLocationList.size(); i++) {
                 String size = String.valueOf(geoLocationList.size());
-                double lat = geoLocationList.get(i).latitude;
-                double lng = geoLocationList.get(i).longitude;
+                double lat = geoLocationList.get(geoLocationListSize - 1).latitude;
+                double lng = geoLocationList.get(geoLocationListSize - 1).longitude;
 
                 Log.v("List test_size", size);
                 Log.v("List test_values", "latitude is " + lat + " longitude is " + lng);
+
+
+            //исключаем дублирующиеся точки и создаем новый Array, точки из которого
+            //уже можно будут рисовать
+            if (geoLocationListSize > 1) {
+                if (!DataHandler.duplication(geoLocationList.get(geoLocationList.size() - 1),
+                        geoLocationList.get(geoLocationList.size() - 2))) {
+                    locationsForMap.add(geoLocationList.get(geoLocationList.size() - 1));
+                    locationsForMapSize++;
+                }
+            } else if (geoLocationListSize == 1) {
+                locationsForMap.add(geoLocationList.get(0));
+                locationsForMapSize++;
             }
+            //проверка наполняемости locationsForMap данными (корректность прохождения фильтра !duplication)
+            Log.v("locationsForMaps_size", "" + locationsForMap.size());
+            Log.v("locationsForMaps_values", "latitude is " + locationsForMap.get(locationsForMapSize -1 ).latitude
+                    + " longitude is " + locationsForMap.get(locationsForMapSize -1 ).longitude);
         }
 
         //рисуем отрезок на карте
@@ -170,7 +191,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (SecurityException e ) {
             Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
         }
-
     }
 
     //начинаем получать обновления локации. Логи были необходимы для поиска ошибок, решил не удалять (могут пригодиться)
@@ -194,5 +214,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         // mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
     }
-
 }
