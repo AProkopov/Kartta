@@ -31,6 +31,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public Location mCurrentLocation;
     public LocationRequest mLocationRequest;
     public boolean mRequestingLocationUpdates = true;
+    public boolean isRecording = false;
+    public boolean isDrawing = false;
     public ArrayList<LatLng> geoLocationList = new ArrayList<>();
 
 
@@ -134,6 +136,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //требование реализации интерфейса LocationListener
         mCurrentLocation = location;
 
+        //добавляем координаты в массив
+        if (isRecording) {
+            geoLocationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
+
+            //тестовый метод для проверки записи в ArrayList
+            for (int i = 0; i < geoLocationList.size(); i++) {
+                String size = String.valueOf(geoLocationList.size());
+                double lat = geoLocationList.get(i).latitude;
+                double lng = geoLocationList.get(i).longitude;
+
+                Log.v("List test_size", size);
+                Log.v("List test_values", "latitude is " + lat + " longitude is " + lng);
+            }
+        }
+
+        //рисуем отрезок на карте
+        if (isDrawing) {
+
+        }
+
         //проверка работоспособности обновления локации и устанока маркера на каждой локации
         LatLng testLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.addMarker(new MarkerOptions().position(testLocation).title("My Location(auto)"));
@@ -166,6 +188,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.v("START_BUTTON onClick", "startButton clicked");
         //trackRecorder() работает в тестовом режиме, выводит текст в консоль
         GeoDataService.trackRecorder();
+        isRecording = true;
+        isDrawing = true;
         //ставим маркер на текущей локации
         // LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
         // mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
