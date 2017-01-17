@@ -1,6 +1,9 @@
 package com.bugsnguns.kartta;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+
+import java.util.ArrayList;
 
 
 /**
@@ -25,5 +28,10 @@ public class DataHandler {
             return true;
         } else return false;
 
+    }
+
+    public static void toDraw(Polyline polyline, ArrayList<LatLng> list) {
+        polyline.setPoints(list);
+        list.clear();
     }
 }

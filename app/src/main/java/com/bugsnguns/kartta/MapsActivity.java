@@ -19,6 +19,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import java.util.ArrayList;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -33,10 +36,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean mRequestingLocationUpdates = true;
     public boolean isRecording = false;
     public boolean isDrawing = false;
-    public ArrayList<LatLng> geoLocationList = new ArrayList<>();
-    public ArrayList<LatLng> locationsForMap = new ArrayList<>();
+    public ArrayList<LatLng> geoLocationList = new ArrayList<>(); //собираем все поступающие локации
+    public ArrayList<LatLng> locationsForMap = new ArrayList<>(); //собираем неповторяющиеся локации
+    public ArrayList<LatLng> locationsToDraw = new ArrayList<>(); //из неповторяющихся локаций берем две последних
     public int geoLocationListSize = 0;
     public int locationsForMapSize = 0;
+    public PolylineOptions polylineOptions = new PolylineOptions();
+    public Polyline polyline;
 
 
 
@@ -161,6 +167,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         geoLocationList.get(geoLocationList.size() - 2))) {
                     locationsForMap.add(geoLocationList.get(geoLocationList.size() - 1));
                     locationsForMapSize++;
+
+                    //берем последнюю пришедшую точку и добавляем ее в ArrayList, который будем
+                    //передавать методу toDraw() класса DataHandler для отображения ломанной на карте
+                    //должен содержать не более двух точек. для этого при каждом вызове
+                    //метода toDraw класса DataHandler очищается методом clear()
+                    locationsToDraw.add(locationsForMap.get(locationsForMapSize - 1));
+                    locationsToDraw.add(locationsForMap.get(locationsForMapSize - 2));
                 }
             } else if (geoLocationListSize == 1) {
                 locationsForMap.add(geoLocationList.get(0));
@@ -174,7 +187,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //рисуем отрезок на карте
         if (isDrawing) {
-
+            DataHandler.toDraw(polyline, locationsToDraw);
         }
 
         //проверка работоспособности обновления локации и устанока маркера на каждой локации
@@ -188,6 +201,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //adding LocationLayout
         try {
             mMap.setMyLocationEnabled(true);
+            //целесообразность инициализации polyline в этом блоке кода не проверена
+            polyline = mMap.addPolyline(polylineOptions);
         } catch (SecurityException e ) {
             Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
         }
