@@ -2,6 +2,7 @@ package com.bugsnguns.kartta;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,8 +42,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public ArrayList<LatLng> locationsToDraw = new ArrayList<>(); //из неповторяющихся локаций берем две последних
     public int geoLocationListSize = 0;
     public int locationsForMapSize = 0;
-    public PolylineOptions polylineOptions = new PolylineOptions();
-    public Polyline polyline;
+    public PolylineOptions routeOpts = null;
+    public Polyline route;
 
 
 
@@ -79,7 +80,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //добавляем возможность запрашивать у Google Play Services информацию о местоположении
     protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest(); //тут класс LocationRequest объявлялся раньше. на SoF посоветовали убрать
+        mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -187,7 +188,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //рисуем отрезок на карте
         if (isDrawing) {
-            DataHandler.toDraw(polyline, locationsToDraw);
+            route.setPoints(locationsForMap);
+
+            //DataHandler.toDraw(polyline, locationsToDraw);
         }
 
         //проверка работоспособности обновления локации и устанока маркера на каждой локации
@@ -201,8 +204,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //adding LocationLayout
         try {
             mMap.setMyLocationEnabled(true);
-            //целесообразность инициализации polyline в этом блоке кода не проверена
-            polyline = mMap.addPolyline(polylineOptions);
         } catch (SecurityException e ) {
             Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
         }
@@ -221,6 +222,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void startGeoTracking(View view) {
         //проверка нажатия кнопки
         Log.v("START_BUTTON onClick", "startButton clicked");
+        //целесообразность инициализации polyline в этом блоке кода не проверена
+        if (mMap != null) {
+            routeOpts = new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(2)
+                    .geodesic(true);
+            route = mMap.addPolyline(routeOpts);
+        }
         //trackRecorder() работает в тестовом режиме, выводит текст в консоль
         GeoDataService.trackRecorder();
         isRecording = true;
