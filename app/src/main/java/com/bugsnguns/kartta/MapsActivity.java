@@ -55,6 +55,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public Button startButton;
     public Button pauseButton;
     public Button stopButton;
+    public DataStorage dataStorage;
+    public DataHandler dataHandler;
 
 
 
@@ -64,9 +66,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_maps);
 
+        //создаем объекты Button для работы с кнопками
         startButton = (Button) findViewById(R.id.startButton);
         pauseButton = (Button) findViewById(R.id.pauseButton);
         stopButton = (Button) findViewById(R.id.stopButton);
+
+        //создание объектов, которые будут хранить и обрабатывать поступающую
+        //информацию о местоположении
+        dataStorage = new DataStorage();
+        dataHandler = new DataHandler();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

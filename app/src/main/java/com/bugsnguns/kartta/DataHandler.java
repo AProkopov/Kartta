@@ -1,8 +1,9 @@
 package com.bugsnguns.kartta;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
-
 import java.util.ArrayList;
 
 
@@ -15,14 +16,6 @@ public class DataHandler {
 
     public static boolean duplication (LatLng currentLocation, LatLng previousLocation) {
 
-        /* переменные в закоменированном блоке созданы для перехода к сравнению локаций
-
-        double currentLatitude = currentLocation.latitude;
-        double currentLongitude = currentLocation.longitude;
-
-        double preveousLatitude = previousLocation.latitude;
-        double previousLongitude = previousLocation.longitude; */
-
         //если объекты одинаковые, то и хеш-коды одинаковые
         if (currentLocation.hashCode() == previousLocation.hashCode()) {
             return true;
@@ -33,5 +26,17 @@ public class DataHandler {
     public static void toDraw(Polyline polyline, ArrayList<LatLng> list) {
         polyline.setPoints(list);
         list.clear();
+    }
+
+    //сохраняет новую информацию о местоположении в массив
+    public void dataReceiver (Location location, DataStorage dataStorage, boolean isRecording) {
+        dataStorage.mCurrentLocation = location;
+
+        //добавляем координаты в массив
+        if (isRecording) {
+            dataStorage.geoLocationList.add(new LatLng(location.getLatitude(), location.getLongitude()));
+            dataStorage.geoLocationListSize++;
+
+        }
     }
 }
