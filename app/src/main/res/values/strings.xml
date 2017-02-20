@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kartta</string>
     <string name="title_activity_maps">Kartta</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Last track</string>
 
     <string name="startButton">start</string>
     <string name="pauseButton">pause</string>

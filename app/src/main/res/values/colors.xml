@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="startButtonColor">#B2FF59</color>
+    <color name="pauseButtonColor">#EEFF41</color>
+    <color name="stopButtonColor">#FFAB91</color>
 </resources>

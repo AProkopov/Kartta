@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -44,6 +47,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public int locationsForMapSize = 0;
     public PolylineOptions routeOpts = null;
     public Polyline route;
+    public LatLng startLocation = null;
+    public LatLng finalLocation = null;
+    public boolean isStarted = false;
+    public boolean isPaused = false;
+    public boolean isStopped = false;
+    public Button startButton;
+    public Button pauseButton;
+    public Button stopButton;
 
 
 
@@ -52,6 +63,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_maps);
+
+        startButton = (Button) findViewById(R.id.startButton);
+        pauseButton = (Button) findViewById(R.id.pauseButton);
+        stopButton = (Button) findViewById(R.id.stopButton);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -81,8 +97,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //добавляем возможность запрашивать у Google Play Services информацию о местоположении
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(500);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         Log.v("4", "createLocationRequest running ok");
     }
@@ -190,12 +206,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (isDrawing) {
             route.setPoints(locationsForMap);
 
-            //DataHandler.toDraw(polyline, locationsToDraw);
+            //установка маркера на стартовой локации
+            if (startLocation == null) {
+                startLocation = new LatLng(locationsForMap.get(0).latitude, locationsForMap.get(0).longitude);
+                mMap.addMarker(new MarkerOptions().position(startLocation).title("Start"));
+            }
         }
 
-        //проверка работоспособности обновления локации и устанока маркера на каждой локации
-        LatLng testLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(testLocation).title("My Location(auto)"));
+        if (isStopped) {
+            finalLocation = new LatLng(locationsForMap.get(locationsForMap.size() - 1).latitude,
+                    locationsForMap.get(locationsForMap.size() - 1).longitude);
+            mMap.addMarker(new MarkerOptions().position(finalLocation).title("Finish"));
+
+        }
     }
     //toDo написать чей метод определили
     @Override
@@ -206,6 +229,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException e ) {
             Toast.makeText(MapsActivity.this, "You have to accept to enjoy all app's services!", Toast.LENGTH_LONG).show();
+        }
+
+        //когда готова карта, создаем polyline для отрисовки трэка
+        if (mMap != null) {
+            routeOpts = new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(4)
+                    .geodesic(true);
+            route = mMap.addPolyline(routeOpts);
         }
     }
 
@@ -222,20 +254,53 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void startGeoTracking(View view) {
         //проверка нажатия кнопки
         Log.v("START_BUTTON onClick", "startButton clicked");
-        //целесообразность инициализации polyline в этом блоке кода не проверена
-        if (mMap != null) {
-            routeOpts = new PolylineOptions()
-                    .color(Color.BLUE)
-                    .width(2)
-                    .geodesic(true);
-            route = mMap.addPolyline(routeOpts);
+        if (isStarted == false) {
+            isRecording = true;
+            isDrawing = true;
+            isStarted = true;
+            isPaused = false;
+            isStopped = false;
+
+            startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
+            pauseButton.setBackgroundResource(android.R.drawable.btn_default);
+            stopButton.setBackgroundResource(android.R.drawable.btn_default);
         }
-        //trackRecorder() работает в тестовом режиме, выводит текст в консоль
-        GeoDataService.trackRecorder();
-        isRecording = true;
-        isDrawing = true;
-        //ставим маркер на текущей локации
-        // LatLng myLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        // mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location"));
+
     }
+
+    public void pauseGeoTracking(View view) {
+        //проверка нажатия кнопки
+        Log.v("PAUSE_BUTTON onClick", "PauseButton clicked");
+
+        if (isStarted ==true) {
+            isRecording = false;
+            isDrawing = false;
+            isPaused = true;
+            isStarted = false;
+            isStopped = false;
+
+            pauseButton.setBackgroundColor(getResources().getColor(R.color.pauseButtonColor));
+            startButton.setBackgroundResource(android.R.drawable.btn_default);
+            stopButton.setBackgroundResource(android.R.drawable.btn_default);
+        }
+    }
+
+    public void stopGeoTracking(View view) {
+        //проверка нажатия кнопки
+        Log.v("STOP_BUTTON onClick", "StopButton clicked");
+
+        if (isStarted ==true || isPaused == true) {
+            isRecording = false;
+            isDrawing = false;
+            isPaused = true;
+            isStarted = false;
+            isStopped = true;
+
+            stopButton.setBackgroundColor(getResources().getColor(R.color.stopButtonColor));
+            pauseButton.setBackgroundResource(android.R.drawable.btn_default);
+            startButton.setBackgroundResource(android.R.drawable.btn_default);
+        }
+    }
+
+
 }

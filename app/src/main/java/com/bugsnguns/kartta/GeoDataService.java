@@ -22,6 +22,8 @@ public class GeoDataService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    //метод ранее использовался в качестве тестового, вызывался из MapsActivity.startGeoTracking
+    //пока пусть тут полежит
     public static void trackRecorder() {
         //this for-loop just for test
         for (int i = 0; i <=10; i++) {
