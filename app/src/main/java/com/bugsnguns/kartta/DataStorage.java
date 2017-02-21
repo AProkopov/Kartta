@@ -23,6 +23,9 @@ public class DataStorage {
     //содержит информацию о размере ArrayList, в котором хранятся гео-точки
     public int geoLocationListSize;
 
+    //содержит информацию о размере ArrayList, в котором хранятся гео-точки для построения Polyline
+    public int locationsForMapSize;
+
     //конструктор, задающий корректные значения переменных при создании экземпляра класса
     public DataStorage () {
         geoLocationList = null;

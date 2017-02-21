@@ -167,7 +167,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //toDo написать чей метод определили
     @Override
     public void onLocationChanged (Location location) {
-    //требование реализации интерфейса LocationListener
+
+        //вызывается метод объекта dataHandler, записывающий данные о поступающих местоположениях
+        //в ArrayList объекта dataStorage
+        dataHandler.receiveData(location, dataStorage, isRecording);
+        dataHandler.makeUniqueLocations(dataStorage, dataHandler);
+        dataHandler.toDrawRoute(route, locationsForMap, isDrawing);
+
+/*
+        //требование реализации интерфейса LocationListener
         mCurrentLocation = location;
 
         //добавляем координаты в массив
@@ -208,13 +216,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.v("locationsForMaps_size", "" + locationsForMap.size());
             Log.v("locationsForMaps_values", "latitude is " + locationsForMap.get(locationsForMapSize -1 ).latitude
                     + " longitude is " + locationsForMap.get(locationsForMapSize -1 ).longitude);
-        }
+        }*/
 
         //рисуем отрезок на карте
         if (isDrawing) {
             route.setPoints(locationsForMap);
 
             //установка маркера на стартовой локации
+            //!!!!!! 21.02.2017 закончил на создании этого метода в ДатаХэндлер. ПРОДОЛЖИТЬ С ЭТОГО МЕСТА!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!
+            
             if (startLocation == null) {
                 startLocation = new LatLng(locationsForMap.get(0).latitude, locationsForMap.get(0).longitude);
                 mMap.addMarker(new MarkerOptions().position(startLocation).title("Start"));
