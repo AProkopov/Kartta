@@ -168,10 +168,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged (Location location) {
 
-        //ПРИЛОЖЕНИЕ ВЫЛЕТАЕТ ПРИ ПРОХОЖДЕНИИ ЭТОГО БЛОКА КОДА ПОСЛЕ НАЖАТИЯ КНОПКИ СТАРТ
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //ПРОДОЛЖИТЬ ТРАБЛШУТИНГ ОТСЮДА
-
         //требование реализации интерфейса LocationListener
         dataStorage.mCurrentLocation = location;
 
@@ -227,7 +223,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             Log.v(TAG, "startButton is pressed");
 
-            //dataHandler.putStartMarker(dataStorage);
+            dataHandler.putStartMarker(dataStorage);
         }
 
     }

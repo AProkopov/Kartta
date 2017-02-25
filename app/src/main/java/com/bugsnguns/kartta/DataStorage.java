@@ -37,8 +37,8 @@ public class DataStorage {
 
     //конструктор, задающий корректные значения переменных при создании экземпляра класса
     public DataStorage () {
-        geoLocationList = null;
-        locationsForMap = null;
+        geoLocationList = new ArrayList<>();
+        locationsForMap = new ArrayList<>();
         mCurrentLocation = null;
         startLocation = null;
         finalLocation = null;
