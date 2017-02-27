@@ -3,6 +3,7 @@ package com.bugsnguns.kartta;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,9 @@ public class DataStorage {
     //содержит информацию о финишной точке (ставится макер в конце маршрута)
     public LatLng finalLocation;
 
+    //содержит информацию о финишном маркере
+    public Marker finishMarker;
+
     //конструктор, задающий корректные значения переменных при создании экземпляра класса
     public DataStorage () {
         geoLocationList = new ArrayList<>();
@@ -43,6 +47,7 @@ public class DataStorage {
         startLocation = null;
         finalLocation = null;
         mLastLocation = null;
+        finishMarker = null;
         geoLocationListSize = 0;
         locationsForMapSize = 0;
     }

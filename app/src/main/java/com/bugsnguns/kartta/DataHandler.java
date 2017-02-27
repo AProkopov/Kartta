@@ -4,6 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
@@ -91,12 +92,20 @@ public class DataHandler {
 
     //метод устанавливает маркер в финишной точке
     public void putFinishMarker (DataStorage dataStorage) {
-        if (dataStorage.finalLocation == null) {
+        //если маркет был ранее создан, удаляем предыдущую версию
+        if (dataStorage.finishMarker != null) {
+            dataStorage.finishMarker.remove();
+        }
+
+        //if (dataStorage.finalLocation == null) {
+        //отмечаем финальное местоположение на маршруте и ставим соответствующий маркер
             dataStorage.finalLocation = new LatLng(dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).latitude,
                     dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).longitude);
-            MapsActivity.mMap.addMarker(new MarkerOptions().position(dataStorage.finalLocation).title("Finish"));
+            dataStorage.finishMarker = MapsActivity.mMap.addMarker(new MarkerOptions()
+                    .position(dataStorage.finalLocation)
+                    .title("Finish"));
 
-        }
+        //}
 
     }
 
