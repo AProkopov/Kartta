@@ -50,6 +50,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean isStarted = false;
     public boolean isPaused = false;
     public boolean isStopped = false;
+    public boolean onceStarded = false;
     public Button startButton;
     public Button pauseButton;
     public Button stopButton;
@@ -173,7 +174,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //вызывается метод объекта dataHandler, записывающий данные о поступающих местоположениях
         //в ArrayList объекта dataStorage
-        dataHandler.receiveData(dataStorage, isRecording);
+        dataHandler.receiveData(dataStorage, isRecording, onceStarded);
         dataHandler.makeUniqueLocations(dataStorage, dataHandler);
         dataHandler.toDrawRoute(route, dataStorage.locationsForMap, isDrawing);
     }
@@ -209,8 +210,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void startGeoTracking(View view) {
+
         //проверка нажатия кнопки
         if (isStarted == false) {
+            onceStarded = true;
             isRecording = true;
             isDrawing = true;
             isStarted = true;
@@ -224,6 +227,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.v(TAG, "startButton is pressed");
 
             dataHandler.putStartMarker(dataStorage);
+
+            Log.v(TAG, "putStartMarker method is called");
         }
 
     }

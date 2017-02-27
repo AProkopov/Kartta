@@ -32,7 +32,7 @@ public class DataHandler {
     }
 
     //сохраняет новую информацию о местоположении в массив
-    public void receiveData(DataStorage dataStorage, boolean isRecording) {
+    public void receiveData(DataStorage dataStorage, boolean isRecording, boolean onceStarted) {
 
 
         //добавляем координаты в массив
@@ -40,6 +40,14 @@ public class DataHandler {
             dataStorage.geoLocationList.add(new LatLng(dataStorage.mCurrentLocation.getLatitude(),
                     dataStorage.mCurrentLocation.getLongitude()));
             dataStorage.geoLocationListSize++;
+        }
+
+        //если еще не была нажата кгопка Start, всегда записываем обновленную лакацию в mCurrentLocation
+        if (!onceStarted) {
+            dataStorage.geoLocationList.add(0, new LatLng(dataStorage.mCurrentLocation.getLatitude(),
+                    dataStorage.mCurrentLocation.getLongitude()));
+            dataStorage.geoLocationListSize = 1;
+
         }
     }
 
@@ -72,6 +80,9 @@ public class DataHandler {
     //метод устанавливает маркер в стартовой точке
     public void putStartMarker (DataStorage dataStorage) {
         if (dataStorage.startLocation == null) {
+
+            Log.v(TAG, "startLocation is null");
+
             dataStorage.startLocation = new LatLng(dataStorage.locationsForMap.get(0).latitude,
                     dataStorage.locationsForMap.get(0).longitude);
             MapsActivity.mMap.addMarker(new MarkerOptions().position(dataStorage.startLocation).title("Start"));
