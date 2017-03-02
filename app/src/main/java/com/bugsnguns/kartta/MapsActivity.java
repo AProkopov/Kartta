@@ -1,5 +1,6 @@
 package com.bugsnguns.kartta;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -211,26 +212,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void startGeoTracking(View view) {
 
-        //проверка нажатия кнопки
-        if (isStarted == false) {
-            onceStarded = true;
-            isRecording = true;
-            isDrawing = true;
-            isStarted = true;
-            isPaused = false;
-            isStopped = false;
+        if (dataStorage.mCurrentLocation != null) {
 
-            startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
-            pauseButton.setBackgroundResource(android.R.drawable.btn_default);
-            stopButton.setBackgroundResource(android.R.drawable.btn_default);
+            //проверка нажатия кнопки
+            if (isStarted == false) {
+                onceStarded = true;
+                isRecording = true;
+                isDrawing = true;
+                isStarted = true;
+                isPaused = false;
+                isStopped = false;
 
-            Log.v(TAG, "startButton is pressed");
+                //убираем ранее проставленный маркер Finish
+                dataHandler.removeFinishMarker(dataStorage);
 
-            dataHandler.putStartMarker(dataStorage);
+                startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
+                pauseButton.setBackgroundResource(android.R.drawable.btn_default);
+                stopButton.setBackgroundResource(android.R.drawable.btn_default);
 
-            Log.v(TAG, "putStartMarker method is called");
+                Log.v(TAG, "startButton is pressed");
+
+                dataHandler.putStartMarker(dataStorage);
+
+                Log.v(TAG, "putStartMarker method is called");
+            }
+
+        } else {
+            Context context = getApplicationContext();
+            CharSequence text = "Поздравляем!" + "\n" + "Вы соображаете быстрее спутников :)" ;
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
-
     }
 
     public void pauseGeoTracking(View view) {

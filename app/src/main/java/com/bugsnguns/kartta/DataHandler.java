@@ -78,6 +78,13 @@ public class DataHandler {
         }
     }
 
+    //метод удаляет маркер Finish, емли он ранее был установлен
+    public void removeFinishMarker (DataStorage dataStorage) {
+        if (dataStorage.finishMarker != null) {
+            dataStorage.finishMarker.remove();
+        }
+    }
+
     //метод устанавливает маркер в стартовой точке
     public void putStartMarker (DataStorage dataStorage) {
         if (dataStorage.startLocation == null) {
@@ -93,19 +100,16 @@ public class DataHandler {
     //метод устанавливает маркер в финишной точке
     public void putFinishMarker (DataStorage dataStorage) {
         //если маркет был ранее создан, удаляем предыдущую версию
-        if (dataStorage.finishMarker != null) {
-            dataStorage.finishMarker.remove();
-        }
+        removeFinishMarker(dataStorage);
 
-        //if (dataStorage.finalLocation == null) {
         //отмечаем финальное местоположение на маршруте и ставим соответствующий маркер
-            dataStorage.finalLocation = new LatLng(dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).latitude,
-                    dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).longitude);
-            dataStorage.finishMarker = MapsActivity.mMap.addMarker(new MarkerOptions()
-                    .position(dataStorage.finalLocation)
-                    .title("Finish"));
+        dataStorage.finalLocation = new LatLng(dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).latitude,
+                dataStorage.locationsForMap.get(dataStorage.locationsForMap.size() - 1).longitude);
+        dataStorage.finishMarker = MapsActivity.mMap.addMarker(new MarkerOptions()
+                .position(dataStorage.finalLocation)
+                .title("Finish"));
 
-        //}
+
 
     }
 
