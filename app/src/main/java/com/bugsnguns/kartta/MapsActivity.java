@@ -288,6 +288,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //startButton.setBackgroundResource(android.R.drawable.btn_default);
 
             dataHandler.putFinishMarker(dataStorage);
+            dataHandler.trackLengthComputer(dataStorage.locationsForMap, dataStorage);
+
+            Log.v(TAG, "distance is " + dataStorage.distance);
+
         }
     }
 

@@ -39,6 +39,8 @@ public class DataStorage {
     //содержит информацию о финишном маркере
     public Marker finishMarker;
 
+    public double distance;
+
     //конструктор, задающий корректные значения переменных при создании экземпляра класса
     public DataStorage () {
         geoLocationList = new ArrayList<>();
@@ -50,6 +52,7 @@ public class DataStorage {
         finishMarker = null;
         geoLocationListSize = 0;
         locationsForMapSize = 0;
+        distance = 0.0;
     }
 
 

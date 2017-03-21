@@ -1,13 +1,14 @@
 package com.bugsnguns.kartta;
 
-import android.location.Location;
-import android.util.Log;
 
+import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
+import com.google.maps.android.SphericalUtil;
+
+
 
 
 /**
@@ -108,9 +109,13 @@ public class DataHandler {
         dataStorage.finishMarker = MapsActivity.mMap.addMarker(new MarkerOptions()
                 .position(dataStorage.finalLocation)
                 .title("Finish"));
+    }
 
-
-
+    //метод вычисляет длину пройденного пути
+    public void trackLengthComputer (ArrayList<LatLng> arrayList, DataStorage dataStorage) {
+        Log.v(TAG, "trackLengthComputer called");
+        dataStorage.distance = SphericalUtil.computeLength(arrayList);
+        Log.v(TAG, "trackLengthComputer finished successfully");
     }
 
 }
