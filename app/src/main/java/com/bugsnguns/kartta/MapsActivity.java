@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -226,9 +227,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //убираем ранее проставленный маркер Finish
                 dataHandler.removeFinishMarker(dataStorage);
 
-                startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
-                pauseButton.setBackgroundResource(android.R.drawable.btn_default);
-                stopButton.setBackgroundResource(android.R.drawable.btn_default);
+                startButton.getBackground().setColorFilter(getResources().getColor(R.color.startButtonColor), PorterDuff.Mode.MULTIPLY);
+                pauseButton.getBackground().setColorFilter(null);
+                stopButton.getBackground().setColorFilter(null);
+                //startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
+                //pauseButton.setBackgroundResource(android.R.drawable.btn_default);
+                //stopButton.setBackgroundResource(android.R.drawable.btn_default);
 
                 Log.v(TAG, "startButton is pressed");
 
@@ -257,9 +261,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             isStarted = false;
             isStopped = false;
 
-            pauseButton.setBackgroundColor(getResources().getColor(R.color.pauseButtonColor));
-            startButton.setBackgroundResource(android.R.drawable.btn_default);
-            stopButton.setBackgroundResource(android.R.drawable.btn_default);
+            pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.pauseButtonColor), PorterDuff.Mode.MULTIPLY);
+            startButton.getBackground().setColorFilter(null);
+            stopButton.getBackground().setColorFilter(null);
+            //pauseButton.setBackgroundColor(getResources().getColor(R.color.pauseButtonColor));
+            //startButton.setBackgroundResource(android.R.drawable.btn_default);
+            //stopButton.setBackgroundResource(android.R.drawable.btn_default);
         }
     }
 
@@ -273,9 +280,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             isStarted = false;
             isStopped = true;
 
-            stopButton.setBackgroundColor(getResources().getColor(R.color.stopButtonColor));
-            pauseButton.setBackgroundResource(android.R.drawable.btn_default);
-            startButton.setBackgroundResource(android.R.drawable.btn_default);
+            stopButton.getBackground().setColorFilter(getResources().getColor(R.color.stopButtonColor), PorterDuff.Mode.MULTIPLY);
+            startButton.getBackground().setColorFilter(null);
+            pauseButton.getBackground().setColorFilter(null);
+            //stopButton.setBackgroundColor(getResources().getColor(R.color.stopButtonColor));
+            //pauseButton.setBackgroundResource(android.R.drawable.btn_default);
+            //startButton.setBackgroundResource(android.R.drawable.btn_default);
 
             dataHandler.putFinishMarker(dataStorage);
         }
