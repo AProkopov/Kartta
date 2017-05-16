@@ -100,7 +100,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.v(TAG, "createLocationRequest() works fine");
     }
 
-    //toDo написать чей метод определили
+    //метод onStart() класса Activity
     @Override
     protected void onStart() {
         //соединение с API при создании Activity
@@ -109,7 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mGoogleApiClient.connect();
     }
 
-    //toDo написать чей метод определили
+    //метод onStop() класса Activity
     @Override
     protected void onStop() {
         //отключение от API при остановке Activity
@@ -119,17 +119,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onStop();
     }
 
-    //toDo написать чей метод определили
+    //метод onCreateOptionsMenu() класса Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.maps_menu, menu);
         return true;
     }
 
-    //toDo написать чей метод определили
+    //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
     @Override
     public void onConnected(Bundle bundle) throws SecurityException{
-        //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
         //запрашиваем последнюю известную локацию
         dataStorage.mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
@@ -141,21 +140,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    //toDo написать чей метод определили
+    //требование реализации интерфейса GoogleApiClient.OnConnectionFailedListener
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-    //требование реализации интерфейса GoogleApiClient.OnConnectionFailedListener
     }
-    //toDo написать чей метод определили
+
+    //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
     @Override
     public void onConnectionSuspended(int i) {
-    //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
     }
-    //toDo написать чей метод определили
+
+    //требование реализации интерфейса LocationListener
     @Override
     public void onLocationChanged (Location location) {
-
-        //требование реализации интерфейса LocationListener
         dataStorage.mCurrentLocation = location;
 
         //вызывается метод объекта dataHandler, записывающий данные о поступающих местоположениях
@@ -165,7 +162,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dataHandler.toDrawRoute(route, dataStorage.locationsForMap, isDrawing);
     }
 
-    //toDo написать чей метод определили
+    //требование реализации интерфейса onMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
