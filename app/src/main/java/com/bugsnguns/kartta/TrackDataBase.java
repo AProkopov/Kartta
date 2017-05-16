@@ -18,7 +18,9 @@ public class TrackDataBase extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL("CREATE TABLE DISTANCE ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "DISTANCE NUMERIC); ");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

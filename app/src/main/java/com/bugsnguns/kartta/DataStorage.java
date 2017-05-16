@@ -1,10 +1,8 @@
 package com.bugsnguns.kartta;
 
 import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
 import java.util.ArrayList;
 
 /**

@@ -21,12 +21,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-//import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-//import java.util.ArrayList;
-//import static java.security.AccessController.getContext;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -34,33 +30,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     protected static GoogleMap mMap;
     public GoogleApiClient mGoogleApiClient;
-    //private Location mLastLocation;
-    //public Location mCurrentLocation;
     public LocationRequest mLocationRequest;
     public boolean mRequestingLocationUpdates = true;
     public boolean isRecording = false;
     public boolean isDrawing = false;
-    //public ArrayList<LatLng> geoLocationList = new ArrayList<>(); //собираем все поступающие локации
-    //public ArrayList<LatLng> locationsForMap = new ArrayList<>(); //собираем неповторяющиеся локации
-    //public ArrayList<LatLng> locationsToDraw = new ArrayList<>(); //из неповторяющихся локаций берем две последних
-    //public int geoLocationListSize = 0;
-    //public int locationsForMapSize = 0;
     public PolylineOptions routeOpts = null;
     public Polyline route;
-    //public LatLng startLocation = null;
-    //public LatLng finalLocation = null;
     public boolean isStarted = false;
     public boolean isPaused = false;
     public boolean isStopped = false;
-    public boolean onceStarded = false;
+    public boolean onceStarted = false;
     public Button startButton;
     public Button pauseButton;
     public Button stopButton;
     public DataStorage dataStorage;
     public DataHandler dataHandler;
     private static final String TAG = "MapsActivity";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +66,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dataHandler = new DataHandler();
         Log.v(TAG, "dataStorage and dataHandler created successfully");
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        //создаем SupportMapFragment для отображения карты
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //start GeoDataService
+        //создание GeoDataService
         Intent serviceIntent = new Intent(this, GeoDataService.class);
         startService(serviceIntent);
         Log.v(TAG, "GeoDataService is running");
 
-        // Create an instance of GoogleAPIClient. Создаем ApiClient
+        //Создаем GoogleApiClient
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -100,7 +85,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .build();
             Log.v(TAG, "mGoogleApiClient created");
         }
-
 
         //делаем запрос о местоположении
         createLocationRequest();
@@ -176,7 +160,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //вызывается метод объекта dataHandler, записывающий данные о поступающих местоположениях
         //в ArrayList объекта dataStorage
-        dataHandler.receiveData(dataStorage, isRecording, onceStarded);
+        dataHandler.receiveData(dataStorage, isRecording, onceStarted);
         dataHandler.makeUniqueLocations(dataStorage, dataHandler);
         dataHandler.toDrawRoute(route, dataStorage.locationsForMap, isDrawing);
     }
@@ -185,7 +169,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //adding LocationLayout
+        //проверка доступности данных о текущем местоположении
         try {
             mMap.setMyLocationEnabled(true);
             Log.v(TAG, "mMap is ready");
@@ -212,12 +196,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void startGeoTracking(View view) {
-
         if (dataStorage.mCurrentLocation != null) {
 
             //проверка нажатия кнопки
             if (isStarted == false) {
-                onceStarded = true;
+                onceStarted = true;
                 isRecording = true;
                 isDrawing = true;
                 isStarted = true;
@@ -230,10 +213,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startButton.getBackground().setColorFilter(getResources().getColor(R.color.startButtonColor), PorterDuff.Mode.MULTIPLY);
                 pauseButton.getBackground().setColorFilter(null);
                 stopButton.getBackground().setColorFilter(null);
-                //startButton.setBackgroundColor(getResources().getColor(R.color.startButtonColor));
-                //pauseButton.setBackgroundResource(android.R.drawable.btn_default);
-                //stopButton.setBackgroundResource(android.R.drawable.btn_default);
-
                 Log.v(TAG, "startButton is pressed");
 
                 dataHandler.putStartMarker(dataStorage);
@@ -253,7 +232,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void pauseGeoTracking(View view) {
         //проверка нажатия кнопки
-
         if (isStarted ==true) {
             isRecording = false;
             isDrawing = false;
@@ -264,15 +242,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.pauseButtonColor), PorterDuff.Mode.MULTIPLY);
             startButton.getBackground().setColorFilter(null);
             stopButton.getBackground().setColorFilter(null);
-            //pauseButton.setBackgroundColor(getResources().getColor(R.color.pauseButtonColor));
-            //startButton.setBackgroundResource(android.R.drawable.btn_default);
-            //stopButton.setBackgroundResource(android.R.drawable.btn_default);
         }
     }
 
     public void stopGeoTracking(View view) {
         //проверка нажатия кнопки
-
         if (isStarted ==true || isPaused == true) {
             isRecording = false;
             isDrawing = false;
@@ -283,17 +257,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             stopButton.getBackground().setColorFilter(getResources().getColor(R.color.stopButtonColor), PorterDuff.Mode.MULTIPLY);
             startButton.getBackground().setColorFilter(null);
             pauseButton.getBackground().setColorFilter(null);
-            //stopButton.setBackgroundColor(getResources().getColor(R.color.stopButtonColor));
-            //pauseButton.setBackgroundResource(android.R.drawable.btn_default);
-            //startButton.setBackgroundResource(android.R.drawable.btn_default);
 
             dataHandler.putFinishMarker(dataStorage);
             dataHandler.trackLengthComputer(dataStorage.locationsForMap, dataStorage);
 
             Log.v(TAG, "distance is " + dataStorage.distance);
-
         }
     }
-
-
 }

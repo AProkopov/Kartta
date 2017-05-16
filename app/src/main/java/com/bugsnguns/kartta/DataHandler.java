@@ -8,9 +8,6 @@ import com.google.android.gms.maps.model.Polyline;
 import java.util.ArrayList;
 import com.google.maps.android.SphericalUtil;
 
-
-
-
 /**
  * Created by Antonio on 14.01.2017.
  */
@@ -26,11 +23,6 @@ public class DataHandler {
             return true;
         } else return false;
 
-    }
-
-    public static void toDraw(Polyline polyline, ArrayList<LatLng> list) {
-        polyline.setPoints(list);
-        list.clear();
     }
 
     //сохраняет новую информацию о местоположении в массив
@@ -49,7 +41,6 @@ public class DataHandler {
             dataStorage.geoLocationList.add(0, new LatLng(dataStorage.mCurrentLocation.getLatitude(),
                     dataStorage.mCurrentLocation.getLongitude()));
             dataStorage.geoLocationListSize = 1;
-
         }
     }
 
