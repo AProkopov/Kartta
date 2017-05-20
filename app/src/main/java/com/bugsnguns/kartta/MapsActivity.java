@@ -46,6 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public Button stopButton;
     public DataStorage dataStorage;
     public DataHandler dataHandler;
+    TrackDataBase trackDataBase = new TrackDataBase(this);
     private static final String TAG = "MapsActivity";
 
     @Override
@@ -276,6 +277,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             dataHandler.trackLengthComputer(dataStorage.locationsForMap, dataStorage);
 
             Log.v(TAG, "distance is " + dataStorage.distance);
+
+            //в БД вносится информация о пройденном расстоянии
+            trackDataBase.getWritableDatabase();
+            trackDataBase.distanceValues.put("DISTANCE", dataStorage.distance);
+
+
+
+
+
         }
     }
 }
