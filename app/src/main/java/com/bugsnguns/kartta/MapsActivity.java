@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -124,6 +125,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.maps_menu, menu);
         return true;
+    }
+
+    //метод выполняет действия, необходимые для каждого пункта меню
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //нажатие пункта Last activity открывает экран с данными о последнем трэке
+            case R.id.lastTrack: {
+                Log.v(TAG, "Last track menu item clicked");
+                Intent intent = new Intent(this, TrackActivity.class);
+                Log.v(TAG, "Intent for TrackActivity created");
+                startActivity(intent);
+                Log.v(TAG, "Intent for TrackActivity sent");
+            }
+        }
+        return false;
     }
 
     //требование реализации интерфейса GoogleApiClient.ConnectionCallbacks
