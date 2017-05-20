@@ -3,6 +3,7 @@ package com.bugsnguns.kartta;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
@@ -279,7 +280,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.v(TAG, "distance is " + dataStorage.distance);
 
             //в БД вносится информация о пройденном расстоянии
-            trackDataBase.getWritableDatabase();
+            //вызов БП, запись расояния, чтение расстояния реализовать в TrackDataBase
+            //здесь только вызывать методы из TrackDataBase
+            SQLiteDatabase db = trackDataBase.getWritableDatabase();
             trackDataBase.distanceValues.put("DISTANCE", dataStorage.distance);
 
 
