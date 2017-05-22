@@ -48,6 +48,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public DataStorage dataStorage;
     public DataHandler dataHandler;
     TrackDataBase trackDataBase = new TrackDataBase(this);
+    SQLiteDatabase db;
     private static final String TAG = "MapsActivity";
 
     @Override
@@ -280,10 +281,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.v(TAG, "distance is " + dataStorage.distance);
 
             //в БД вносится информация о пройденном расстоянии
-            //вызов БП, запись расояния, чтение расстояния реализовать в TrackDataBase
+            //вызов БД, запись расояния, чтение расстояния реализовать в TrackDataBase
             //здесь только вызывать методы из TrackDataBase
-            SQLiteDatabase db = trackDataBase.getWritableDatabase();
+
             trackDataBase.distanceValues.put("DISTANCE", dataStorage.distance);
+            trackDataBase.onWrite();
 
 
 
