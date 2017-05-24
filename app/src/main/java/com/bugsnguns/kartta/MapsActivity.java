@@ -1,5 +1,6 @@
 package com.bugsnguns.kartta;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -281,16 +282,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Log.v(TAG, "distance is " + dataStorage.distance);
 
             //в БД вносится информация о пройденном расстоянии
-            //вызов БД, запись расояния, чтение расстояния реализовать в TrackDataBase
-            //здесь только вызывать методы из TrackDataBase
+            //вызов БД, запись расояния, чтение расстояния реализовано в TrackDataBase
+            //distanceValues каждое нажытие кнопки Stop очищается
 
+            trackDataBase.distanceValues.clear();
             trackDataBase.distanceValues.put("DISTANCE", dataStorage.distance);
             trackDataBase.onWrite();
-
-
-
-
-
         }
     }
 }

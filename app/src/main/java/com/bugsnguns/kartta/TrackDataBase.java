@@ -44,7 +44,7 @@ public class TrackDataBase extends SQLiteOpenHelper {
         }
 
         Log.v(TAG, "onWrite is called");
-        db.insert("DISTANCE", null, distanceValues);
+        db.insert("TRACK", null, distanceValues);
         Log.v(TAG, "onWrite finished");
 
         //// TODO: 23.05.2017
@@ -68,10 +68,12 @@ public class TrackDataBase extends SQLiteOpenHelper {
             Log.v(TAG, "cursor is created");
         }
         //// TODO: 23.05.2017
-        //разобраться с проблемой: не читаются данные из БД
-        //cursor.moveToFirst();
-        //System.out.println("WOW THATS WORK "+ cursor.getDouble(1));
-        Log.v(TAG, "onRead() is finished");
+        //разобраться с проблемой: не обновляются данные в БД
+        if (cursor.moveToFirst()) {
+
+            System.out.println("WOW THAT WORKS " + cursor.getDouble(0));
+            Log.v(TAG, "onRead() is finished");
+        }
     }
 
 
