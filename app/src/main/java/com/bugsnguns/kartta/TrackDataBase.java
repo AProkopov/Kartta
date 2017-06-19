@@ -62,8 +62,6 @@ public class TrackDataBase extends SQLiteOpenHelper {
 
         Log.v(TAG, "onRead() is called");
         createCursor();
-        //// TODO: 23.05.2017
-        //разобраться с проблемой: не обновляются данные в БД
         cursor.moveToLast();
         Log.v(TAG, "WOW THAT WORKS " + cursor.getCount());
         Log.v(TAG, "WOW THAT WORKS " + cursor.getDouble(0));
