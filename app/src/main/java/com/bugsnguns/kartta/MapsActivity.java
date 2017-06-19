@@ -283,9 +283,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             //в БД вносится информация о пройденном расстоянии
             //вызов БД, запись расояния, чтение расстояния реализовано в TrackDataBase
-            //distanceValues каждое нажытие кнопки Stop очищается
-
-            trackDataBase.distanceValues.clear();
             trackDataBase.distanceValues.put("DISTANCE", dataStorage.distance);
             trackDataBase.onWrite();
         }

@@ -15,7 +15,7 @@ public class TrackDataBase extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "LastTrack.db";
-    private static final String TAG = "TrackDataBase";
+    private static final String TAG = "TrackDataBaseTag";
     public ContentValues distanceValues= new ContentValues();
     public SQLiteDatabase db;
     public Cursor cursor;
@@ -44,12 +44,10 @@ public class TrackDataBase extends SQLiteOpenHelper {
         }
 
         Log.v(TAG, "onWrite is called");
+        Log.v(TAG, "distanceValues size is " + distanceValues.size());
+        Log.v(TAG, "distanceValues contains " + distanceValues.getAsDouble("DISTANCE"));
         db.insert("TRACK", null, distanceValues);
         Log.v(TAG, "onWrite finished");
-
-        //// TODO: 23.05.2017
-        //метод размещен тут с целью тестирования
-        onRead();
     }
 
     public void createCursor () {
@@ -63,19 +61,16 @@ public class TrackDataBase extends SQLiteOpenHelper {
     public void onRead () {
 
         Log.v(TAG, "onRead() is called");
-        if (cursor == null) {
-            createCursor();
-            Log.v(TAG, "cursor is created");
-        }
+        createCursor();
         //// TODO: 23.05.2017
         //разобраться с проблемой: не обновляются данные в БД
-        if (cursor.moveToFirst()) {
-
-            System.out.println("WOW THAT WORKS " + cursor.getDouble(0));
-            Log.v(TAG, "onRead() is finished");
+        cursor.moveToLast();
+        Log.v(TAG, "WOW THAT WORKS " + cursor.getCount());
+        Log.v(TAG, "WOW THAT WORKS " + cursor.getDouble(0));
+        Log.v(TAG, "onRead() is finished");
         }
     }
 
 
 
-}
+
