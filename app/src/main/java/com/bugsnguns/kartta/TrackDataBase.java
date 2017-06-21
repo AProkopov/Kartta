@@ -11,6 +11,7 @@ import android.util.Log;
  * Created by Antonio on 21.03.2017.
  */
 
+//БД для хранения информация о пройденном расстоянии
 public class TrackDataBase extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
@@ -50,6 +51,7 @@ public class TrackDataBase extends SQLiteOpenHelper {
         Log.v(TAG, "onWrite finished");
     }
 
+    //создается экземпляр Cursor для полученя данных из БД, содержащей данные о пройденном расстоянии
     public void createCursor () {
         Log.v(TAG, "createCursor() is called");
         cursor = this.getWritableDatabase().query("TRACK",
@@ -58,14 +60,18 @@ public class TrackDataBase extends SQLiteOpenHelper {
         Log.v(TAG, "createCursor() is finished");
     }
 
-    public void onRead () {
+    public double onRead () {
 
         Log.v(TAG, "onRead() is called");
+
         createCursor();
         cursor.moveToLast();
+
         Log.v(TAG, "WOW THAT WORKS " + cursor.getCount());
         Log.v(TAG, "WOW THAT WORKS " + cursor.getDouble(0));
         Log.v(TAG, "onRead() is finished");
+
+        return cursor.getDouble(0);
         }
     }
 

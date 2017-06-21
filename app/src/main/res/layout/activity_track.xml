@@ -9,8 +9,8 @@
     tools:context="com.bugsnguns.kartta.TrackActivity">
 
     <TextView
-        android:id="@+id/dateView"
-        android:text="18.05.2017"
+        android:id="@+id/aboutTrackView"
+        android:text="Last track (km)"
         android:textSize="48dp"
         android:textColor="#ffffff"
         android:layout_marginTop="64dp"
@@ -21,10 +21,10 @@
 
     <TextView
         android:id="@+id/distanceView"
-        android:text="21.1 km"
+        android:text="no saved tracks"
         android:textSize="64dp"
         android:textColor="#ffffff"
-        android:layout_below="@+id/dateView"
+        android:layout_below="@+id/aboutTrackView"
         android:layout_marginTop="32dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
