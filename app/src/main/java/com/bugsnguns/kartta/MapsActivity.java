@@ -49,11 +49,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public DataStorage dataStorage;
     public DataHandler dataHandler;
     TrackDataBase trackDataBase = new TrackDataBase(this);
-    SQLiteDatabase db;
-    //// TODO: 21.06.2017  
-    //целесообразность static экземпляра класса под вопросом
-    static AppCompatActivity thisActivity;
-    //
     private static final String TAG = "MapsActivity";
 
     @Override
@@ -98,10 +93,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //делаем запрос о местоположении
         createLocationRequest();
         Log.v(TAG, "createLocationRequest() is called");
-
-        //// TODO: 21.06.2017  
-        //целемообразность под вопросом
-        thisActivity = (AppCompatActivity) getApplicationContext();
     }
 
     //добавляем возможность запрашивать у Google Play Services информацию о местоположении
